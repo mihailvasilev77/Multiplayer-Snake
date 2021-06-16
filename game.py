@@ -63,6 +63,9 @@ class Food():
         self.randomize_position()
 
     def randomize_position(self):
+        chance = random.uniform(0,1)
+        if chance >= 0.8:
+            self.colour = YELLOW
         self.position = (random.randint(0, grid_width-1)*gridsize, random.randint(0, grid_height-1)*gridsize)
 
     def draw(self, surface):
@@ -70,7 +73,7 @@ class Food():
         pygame.draw.rect(surface, self.colour, r)
         pygame.draw.rect(surface, self.colour, r, 1)
 
-def drawGrid(surface):
+def drawBoard(surface):
     for y in range(0, int(grid_height)):
         for x in range(0, int(grid_width)):
             if (x+y)%2 == 0:
@@ -80,7 +83,7 @@ def drawGrid(surface):
                 fs = pygame.Rect((x*gridsize, y*gridsize), (gridsize,gridsize))
                 pygame.draw.rect(surface, LIGHT_PURPLE, fs)
 
-def handle_keys(up,down,right,left):
+def handleMovement(up,down,right,left):
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
@@ -103,35 +106,39 @@ def handle_keys(up,down,right,left):
         if keys_pressed[pygame.K_LEFT]:
             snake1.turn(left)
 
-def main():
-    ans = input("Please select the desirable singleplayer or multiplayer:")
-    if ans == "singleplayer":
-        singleplayer.main()
-    else:
-        answer = input("Please select the desirable gamemode (time rush/vanilla):")
-        choice = False
-        if answer == "vanilla":
-            choice = True
-        gameloop(choice)
+def snakeCol(snake,snake1):
+    if snake.get_head_position() in snake1.positions:
+        snake.reset()
+        
+    if snake1.get_head_position() in snake.positions:
+        snake1.reset()
+
+def eatCheck(snake,food):
+    if snake.get_head_position() == food.position:
+        if food.colour == YELLOW:
+            snake.length += 2
+            snake.score += 2
+            food.colour = RED
+        else:
+            snake.length += 1
+            snake.score += 1
+        food.randomize_position()
 
 def gameloop(choice):
     while (True):
         clock.tick(velocity)
-        minutes=(pygame.time.get_ticks()-start_ticks)/100000
+        seconds=(pygame.time.get_ticks()-start_ticks)/1000
 
-        handle_keys(up,down,right,left)
-        drawGrid(surface)
+        handleMovement(up,down,right,left)
+        drawBoard(surface)
         snake.move()
         snake1.move()
 
-        if snake.get_head_position() == food.position:
-            snake.length += 1
-            snake.score += 1
-            food.randomize_position()
-        if snake1.get_head_position() == food.position:
-            snake1.length += 1
-            snake1.score += 1
-            food.randomize_position()
+        snakeCol(snake,snake1)
+        snakeCol(snake1,snake)
+        
+        eatCheck(snake,food)
+        eatCheck(snake1,food)
 
         snake.draw(surface)
         snake1.draw(surface)
@@ -146,16 +153,16 @@ def gameloop(choice):
         if choice == True:
             if snake.colcheck == True:
                 text = font.render("Player 2 won cograts",True,BLACK, GREEN)
-                screen.fill((255,255,255))
+                screen.fill(BLACK)
                 screen.blit(text, centertext)
             if snake1.colcheck == True:
                 text = font.render("Player 1 won cograts",True,BLACK, BLUE)
                 screen.fill(BLACK)
                 screen.blit(text, centertext)
         else:
-            mins = font.render("{:.2f}".format(minutes),True,BLACK)
-            screen.blit(mins,(WIDTH//2-30,5))
-            if minutes>5:
+            secs = font.render("{:.2f}".format(seconds),True,BLACK)
+            screen.blit(secs,(WIDTH//2-30,5))
+            if seconds>120:
                 if snake.score > snake1.score:
                     text = font.render("Player 1 won cograts",True,BLUE, BLACK)
                 elif snake1.score > snake.score:
@@ -167,12 +174,24 @@ def gameloop(choice):
         
         pygame.display.update()
 
+def main():
+    ans = input("Please select the desirable singleplayer or multiplayer:")
+    if ans == "singleplayer":
+        singleplayer.main()
+    else:
+        answer = input("Please select the desirable gamemode (time rush/vanilla):")
+        choice = False
+        if answer == "vanilla":
+            choice = True
+        gameloop(choice)
+
 WIDTH = 600
 HEIGHT = 480
 
 RED = (224, 18, 18)
 BLUE = (10, 13, 240)
 GREEN = (10, 240, 98)
+YELLOW = (255,255,0)
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 LIGHT_BLUE = (87, 175, 230)
@@ -202,11 +221,10 @@ image = pygame.image.load("snake.jpg")
 pygame.display.set_icon(image)
 
 font = pygame.font.SysFont("agencyfb",32)
-text = font.render("Player Xw won cograts",True,WHITE, BLACK)
+text = font.render("Player X won cograts",True,WHITE, BLACK)
 centertext = text.get_rect()
 centertext.center = (WIDTH//2, HEIGHT//2)
 
-
 surface = pygame.Surface(screen.get_size())
 surface = surface.convert()
-drawGrid(surface)
+drawBoard(surface)
