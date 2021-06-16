@@ -32,6 +32,6 @@ The second gamemode is the vanilla style in which whoever crashes first, loses.
 * **drawBoard()** - draws the board in a checkers/chess pattern
 * **handleMovement()** - checks for keyboard input and moves the coresponding snake
 * **snakeCol()** - checks for collision with the other snake
-* **eatCheck()** - checks whether food has been consumed
+* **eatCheck()** - checks if food has been consumed
 * **gameloop()** - a infinitive while loop that runs the game
 * **main()** - selects gamemodes and the functions used to start the game
