@@ -4,7 +4,8 @@ Python version: 3.8.6
 Modules/Libraries  used: pygame, random, sys
 
 # Installation
-`git clone https://github.com/mishopazarlucka/ProjectPy.git` `\n` `pip install -r requirements.txt`
+`git clone https://github.com/mishopazarlucka/ProjectPy.git`
+`pip install -r requirements.txt`
 
 # How does it work?
 This version of the snake game provides an option for the classical singleplayer snake game and two multiplayer gamemodes.
