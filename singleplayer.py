@@ -42,7 +42,7 @@ class Snake():
             pygame.draw.rect(surface, self.colour, r)
             pygame.draw.rect(surface, BLACK, r, 1)
 
-    def handle_keys(self):
+    def handleMovement(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -71,7 +71,7 @@ class Food():
         pygame.draw.rect(surface, self.colour, r)
         pygame.draw.rect(surface, self.colour, r, 1)
 
-def drawGrid(surface):
+def drawBoard(surface):
     for y in range(0, int(grid_height)):
         for x in range(0, int(grid_width)):
             if (x+y)%2 == 0:
@@ -110,7 +110,7 @@ def main():
 
     surface = pygame.Surface(screen.get_size())
     surface = surface.convert()
-    drawGrid(surface)
+    drawBoard(surface)
 
     snake = Snake()
     food = Food()
@@ -119,8 +119,8 @@ def main():
 
     while (True):
         clock.tick(10)
-        snake.handle_keys()
-        drawGrid(surface)
+        snake.handleMovement()
+        drawBoard(surface)
         snake.move()
         if snake.get_head_position() == food.position:
             snake.length += 1
