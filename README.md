@@ -4,7 +4,7 @@ Python version: 3.8.6 <br />
 Modules  used: pygame, random, sys 
 
 # Installation
-`git clone https://github.com/mishopazarlucka/ProjectPy.git` <br />
+`git clone https://github.com/mihailvasilev77/ProjectPy.git` <br />
 `pip install -r requirements.txt`
 
 # How does it work?
