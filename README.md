@@ -3,9 +3,11 @@ A version of the classic snake game with a second player twist. <br />
 Python version: 3.8.6 <br />
 Modules  used: pygame, random, sys 
 
-# Installation
+# Running and Installation
 `git clone https://github.com/mihailvasilev77/ProjectPy.git` <br />
-`pip install -r requirements.txt`
+`cd ProjectPy` <br />
+`pip install -r requirements.txt` or `python -m pip install -r requirements.txt`<br />
+`py main.py` or `python main.py`
 
 # How does it work?
 This version of the snake game provides an option for the classical singleplayer snake game and two multiplayer gamemodes.
